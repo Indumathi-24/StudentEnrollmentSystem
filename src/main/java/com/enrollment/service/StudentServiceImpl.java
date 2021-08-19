@@ -27,7 +27,7 @@ public class StudentServiceImpl implements StudentService{
 
 	@Override
 	public StudentEntity getStudentDetailById(int rollNo) {
-		return studentDAO.findById(rollNo).get();
+		return studentDAO.findById(rollNo).get();//get
 	}
 	
 	
