@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,9 +27,9 @@ public class StudentController {
      @Autowired
      private StudentService studentService;
      
-     @PostMapping("/studentinsertion")
-     public ResponseEntity<String> addStudentDetails(@RequestBody StudentEntity student) throws RollNoNotFoundException{
-    	 StudentEntity s=studentService.addStudentDetails(student);
+     @PostMapping("/studentAssignInsertion/{rollNo}/studentinsertion")
+     public ResponseEntity<String> addStudentDetails(@PathVariable("rollNo") Long rollNo,@RequestBody StudentEntity student) throws RollNoNotFoundException{
+    	 StudentEntity s=studentService.addStudentDetails(rollNo,student);
     	 if(s==null) {
     		 throw new RollNoNotFoundException("Roll No is invalid");
     	 }
@@ -36,24 +38,38 @@ public class StudentController {
     	 }
      }
      
-     @GetMapping("/getAllStudent")
-     public ResponseEntity<List<StudentEntity>> getAllStudentDetails(){
-    	 List<StudentEntity> studentList=studentService.getAllStudentDetails();
-    	 return new ResponseEntity<List<StudentEntity>>(studentList,new HttpHeaders(),HttpStatus.OK);
+     @GetMapping("getAllstudentAssign/{rollNo}/getParticularStudent")
+     public ResponseEntity<StudentEntity> getParticularStudentDetails(@PathVariable("rollNo") Long rollNo) throws RollNoNotFoundException{
+    	 StudentEntity student=studentService.getParticularStudentDetails(rollNo);
+    	 return new ResponseEntity<StudentEntity>(student,new HttpHeaders(),HttpStatus.OK);
     	 }
     
-     @GetMapping("/getStudentById/{rollNo}")
-     public ResponseEntity<StudentEntity> getStudentDetailById(@PathVariable("rollNo") int rollNo) throws RollNoNotFoundException{
+     /*@GetMapping("getAllstudentAssign/{rollNo}/getStudentById/{}")
+     public ResponseEntity<StudentEntity> getStudentDetailById(@PathVariable("rollNo") Long rollNo) throws RollNoNotFoundException{
      StudentEntity s=studentService.getStudentDetailById(rollNo);
     			if (s == null) {
     				throw new RollNoNotFoundException("Roll No does not exist,so we couldn't fetch details");
     			} else {
     				return new ResponseEntity<StudentEntity>(s, new HttpHeaders(), HttpStatus.OK);
     			}
-    		}
+    		}*/
 
-	 }
+     @PutMapping("/updateStudent/{id}")
+     public ResponseEntity<String> updateStudentDetails(@PathVariable("id") Long id,@RequestBody StudentEntity student) throws RollNoNotFoundException
+     {
+     return studentService.updateStudentDetails(id,student);
+     }
+     @DeleteMapping("/deleteStudent/{id}")
+ 	 public ResponseEntity<String> deleteStudentDetails(@PathVariable("id") Long id) throws RollNoNotFoundException {
+ 		StudentEntity s = studentService.deleteStudentDetails(id);
+ 		if (s == null) {
+ 			throw new RollNoNotFoundException("Delete Operation Unsuccessful,Provided Id does not exist");
+ 		} else {
+ 			return new ResponseEntity<String>("Employee deleted successfully", new HttpHeaders(), HttpStatus.OK);
+ 		}
+ 	}
 
+}
      
      
      

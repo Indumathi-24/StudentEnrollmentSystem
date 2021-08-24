@@ -2,35 +2,77 @@ package com.enrollment.service;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.enrollment.entity.StudentAssignEntity;
 import com.enrollment.entity.StudentEntity;
+import com.enrollment.exception.DepartmentNotFoundException;
+import com.enrollment.exception.RollNoNotFoundException;
+import com.enrollment.repository.StudentAssignDAO;
 import com.enrollment.repository.StudentDAO;
 
 @Service
 public class StudentServiceImpl implements StudentService{
-
+    @Autowired
+    StudentAssignDAO studentAssignDAO;
 	@Autowired
 	StudentDAO studentDAO;
 	
 	@Override
-	public StudentEntity addStudentDetails(StudentEntity student) {
-		return studentDAO.save(student);
+	public StudentEntity addStudentDetails(Long rollNo,StudentEntity studentEntity) throws RollNoNotFoundException {
+		return studentAssignDAO.findById(rollNo)
+				.map(student->{
+					studentEntity.setStudentAssign(student);
+					return studentDAO.save(studentEntity);
+				}).orElseThrow(()->new RollNoNotFoundException("Roll No Not Found"));
+				
 	}
 	
 	@Override
-	public List<StudentEntity> getAllStudentDetails() 
+	public StudentEntity getParticularStudentDetails(Long rollNo) throws RollNoNotFoundException 
 	{
-	return studentDAO.findAll();
-	}
+		if(!studentAssignDAO.existsById(rollNo)) {
+            throw new RollNoNotFoundException("Student not found!");
+        }
+    	
+    	return studentDAO.findByStudentId(rollNo);
+ }
+	
 
-	@Override
-	public StudentEntity getStudentDetailById(int rollNo) {
+	/*@Override
+	public StudentEntity getStudentDetailById(Long rollNo) {
 		return studentDAO.findById(rollNo).get();//get
 	}
+	*/
+	@Override
+	public ResponseEntity<String> updateStudentDetails(Long id,StudentEntity studentEntity) throws RollNoNotFoundException {
+		return studentDAO.findById(id)
+		.map(student->{
+		student.setFirstName(studentEntity.getFirstName());
+		student.setLastName(studentEntity.getLastName());
+		student.setDateOfBirth(studentEntity.getDateOfBirth());
+		student.setGender(studentEntity.getGender());
+		student.setEmail(studentEntity.getEmail());
+		student.setContactNo(studentEntity.getContactNo());
+		student.setAddress(studentEntity.getAddress());
+		studentDAO.save(student);
+	return new ResponseEntity<String>("Student Details updated successfully!",new HttpHeaders(),HttpStatus.OK);
+	}).orElseThrow(()->new RollNoNotFoundException("Student not found with the rollNo"+" "+id));
+	}
 	
-	
+	@Override
+	public StudentEntity deleteStudentDetails(Long id) {
+		StudentEntity studentEntity=studentDAO.findById(id).get();
+		if(	studentEntity !=null)
+			studentDAO.deleteById(id);
+		return studentEntity;  
+	}
+
 	
 }
 
