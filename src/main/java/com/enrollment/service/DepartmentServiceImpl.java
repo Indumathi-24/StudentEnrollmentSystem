@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.enrollment.entity.DepartmentEntity;
 import com.enrollment.exception.DepartmentNotFoundException;
-import com.enrollment.repository.DepartmentDAO;
+import com.enrollment.repository.DepartmentRepository;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService{
 	@Autowired
-	private DepartmentDAO departmentDAO;
+	private DepartmentRepository departmentDAO;
 	@Override
 	public ResponseEntity<String> addDepartmentDetails(DepartmentEntity departmentDetails) {
 		

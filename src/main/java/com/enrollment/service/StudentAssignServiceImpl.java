@@ -15,16 +15,16 @@ import com.enrollment.entity.StudentAssignEntity;
 import com.enrollment.entity.StudentAssignEntity;
 import com.enrollment.exception.DepartmentNotFoundException;
 import com.enrollment.exception.RollNoNotFoundException;
-import com.enrollment.repository.DepartmentDAO;
-import com.enrollment.repository.StudentAssignDAO;
+import com.enrollment.repository.DepartmentRepository;
+import com.enrollment.repository.StudentAssignRepository;
 
 @Service
 public class StudentAssignServiceImpl implements StudentAssignService{
 	@Autowired
-	StudentAssignDAO studentAssignDAO;
+	StudentAssignRepository studentAssignDAO;
 	
 	@Autowired
-	DepartmentDAO departmentDAO;
+	DepartmentRepository departmentDAO;
 	
 	
 	@Override
@@ -49,6 +49,17 @@ public class StudentAssignServiceImpl implements StudentAssignService{
 		return studentAssignDAO.findAll();
 	}*/
 	 @Override
+		public ResponseEntity<StudentAssignEntity> getParticularStudentAssignDetails(Long rollNo) throws RollNoNotFoundException {
+			
+			if(!studentAssignDAO.existsById(rollNo))
+			{
+				throw new RollNoNotFoundException("Roll No Not Found,Enter the valid ID!");
+			}
+			StudentAssignEntity studentAssignEntity=studentAssignDAO.findById(rollNo).get();
+			
+			return new ResponseEntity<StudentAssignEntity>(studentAssignEntity,new HttpHeaders(),HttpStatus.OK);
+		}
+	 @Override
 	 public ResponseEntity<String> updateStudentAssignDetails( Long deptId, Long rollNo, StudentAssignEntity studentAssign) throws DepartmentNotFoundException, RollNoNotFoundException{ 
 		 if(!departmentDAO.existsById(deptId)) {
 	    		throw new DepartmentNotFoundException("Department not found!");
@@ -72,4 +83,5 @@ public class StudentAssignServiceImpl implements StudentAssignService{
 	                    return new ResponseEntity<String>("Student Assign Details Deleted successfully!", new HttpHeaders(), HttpStatus.OK);
 	                }).orElseThrow(()->new RollNoNotFoundException("Student Not Found!")); 
 	 }
+	 
 }

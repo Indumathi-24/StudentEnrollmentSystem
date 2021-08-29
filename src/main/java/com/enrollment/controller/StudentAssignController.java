@@ -2,10 +2,12 @@ package com.enrollment.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enrollment.entity.DepartmentEntity;
 import com.enrollment.entity.StudentAssignEntity;
 import com.enrollment.entity.StudentLoginEntity;
 import com.enrollment.exception.DepartmentNotFoundException;
@@ -23,6 +26,7 @@ import com.enrollment.service.StudentAssignService;
 
 @RestController
 @RequestMapping("/studentAssign")
+@CrossOrigin("http://localhost:4200")
 public class StudentAssignController {
 	@Autowired
 	private StudentAssignService studentAssignService;
@@ -46,6 +50,11 @@ public class StudentAssignController {
 		List<StudentAssignEntity> studentAssignList=studentAssignService.getAllStudentAssignDetails();
    	    return studentAssignList;
 }*/
+	@GetMapping("/getParticularStudentAssign/{rollNo}")
+	public ResponseEntity<StudentAssignEntity> getParticularStudentAssignDetails(@PathVariable("rollNo") Long rollNo) throws RollNoNotFoundException
+	{
+		return studentAssignService.getParticularStudentAssignDetails(rollNo);
+	}
 	@PutMapping("/departmentUpdation/{deptId}/updateStudentAssign/{rollNo}")
 	public ResponseEntity<String> updateStudentAssignDetails(@PathVariable("deptId") Long deptId,@PathVariable("rollNo") Long rollNo,@RequestBody StudentAssignEntity student) throws RollNoNotFoundException, DepartmentNotFoundException
     {

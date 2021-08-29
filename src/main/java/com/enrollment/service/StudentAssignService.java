@@ -15,6 +15,7 @@ public interface StudentAssignService {
 	StudentAssignEntity addStudentAssignDetails(Long deptId,StudentAssignEntity studentAssign) throws DepartmentNotFoundException;
 	List<StudentAssignEntity> getAllStudentAssignDetails(Long deptId) throws DepartmentNotFoundException;
 	//public List<StudentAssignEntity> getAllStudentAssignDetails();
+	ResponseEntity<StudentAssignEntity> getParticularStudentAssignDetails(Long rollNo) throws RollNoNotFoundException;
 	ResponseEntity<String> updateStudentAssignDetails( Long deptId,Long rollNo, StudentAssignEntity studentAssign) throws DepartmentNotFoundException, RollNoNotFoundException;
 	ResponseEntity<String> deleteStudentAssignDetails( Long deptId,Long rollNo) throws DepartmentNotFoundException, RollNoNotFoundException;
 }

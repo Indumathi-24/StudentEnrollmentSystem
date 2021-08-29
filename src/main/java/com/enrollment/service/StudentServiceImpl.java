@@ -13,15 +13,15 @@ import com.enrollment.entity.StudentAssignEntity;
 import com.enrollment.entity.StudentEntity;
 import com.enrollment.exception.DepartmentNotFoundException;
 import com.enrollment.exception.RollNoNotFoundException;
-import com.enrollment.repository.StudentAssignDAO;
-import com.enrollment.repository.StudentDAO;
+import com.enrollment.repository.StudentAssignRepository;
+import com.enrollment.repository.StudentRepository;
 
 @Service
 public class StudentServiceImpl implements StudentService{
     @Autowired
-    StudentAssignDAO studentAssignDAO;
+    StudentAssignRepository studentAssignDAO;
 	@Autowired
-	StudentDAO studentDAO;
+	StudentRepository studentDAO;
 	
 	@Override
 	public StudentEntity addStudentDetails(Long rollNo,StudentEntity studentEntity) throws RollNoNotFoundException {
@@ -50,8 +50,8 @@ public class StudentServiceImpl implements StudentService{
 	}
 	*/
 	@Override
-	public ResponseEntity<String> updateStudentDetails(Long id,StudentEntity studentEntity) throws RollNoNotFoundException {
-		return studentDAO.findById(id)
+	public ResponseEntity<String> updateStudentDetails(Long personalId,StudentEntity studentEntity) throws RollNoNotFoundException {
+		return studentDAO.findById(personalId)
 		.map(student->{
 		student.setFirstName(studentEntity.getFirstName());
 		student.setLastName(studentEntity.getLastName());
@@ -62,14 +62,14 @@ public class StudentServiceImpl implements StudentService{
 		student.setAddress(studentEntity.getAddress());
 		studentDAO.save(student);
 	return new ResponseEntity<String>("Student Details updated successfully!",new HttpHeaders(),HttpStatus.OK);
-	}).orElseThrow(()->new RollNoNotFoundException("Student not found with the rollNo"+" "+id));
+	}).orElseThrow(()->new RollNoNotFoundException("Student not found with the rollNo"+" "+personalId));
 	}
 	
 	@Override
-	public StudentEntity deleteStudentDetails(Long id) {
-		StudentEntity studentEntity=studentDAO.findById(id).get();
+	public StudentEntity deleteStudentDetails(Long personalId) {
+		StudentEntity studentEntity=studentDAO.findById(personalId).get();
 		if(	studentEntity !=null)
-			studentDAO.deleteById(id);
+			studentDAO.deleteById(personalId);
 		return studentEntity;  
 	}
 

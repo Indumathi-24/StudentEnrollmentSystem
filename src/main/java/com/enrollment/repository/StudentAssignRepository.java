@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.enrollment.entity.StudentAssignEntity;
 
 @Repository
-public interface StudentAssignDAO extends JpaRepository<StudentAssignEntity,Long>{
+public interface StudentAssignRepository extends JpaRepository<StudentAssignEntity,Long>{
 	//Optional<StudentAssignEntity> findByDeptId(Long deptId);
 	@Query("Select s from StudentAssignEntity s where s.department.deptId=:deptId")
 	//@Query(name="Select * from StudentAssignEntity s where s.department.deptId=:deptId",nativeQuery=true)

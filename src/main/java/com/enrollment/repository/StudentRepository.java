@@ -11,7 +11,7 @@ import com.enrollment.entity.StudentAssignEntity;
 import com.enrollment.entity.StudentEntity;
 
 @Repository
-public interface StudentDAO extends JpaRepository<StudentEntity,Long>{
+public interface StudentRepository extends JpaRepository<StudentEntity,Long>{
 	@Query("Select s from StudentEntity s where s.studentAssign.rollNo=:rollNo")
 	 StudentEntity findByStudentId(@Param("rollNo") Long rollNo);
 }

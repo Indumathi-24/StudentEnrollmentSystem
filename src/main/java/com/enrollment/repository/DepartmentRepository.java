@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.enrollment.entity.DepartmentEntity;
 
 @Repository
-public interface DepartmentDAO extends JpaRepository<DepartmentEntity,Long>{
+public interface DepartmentRepository extends JpaRepository<DepartmentEntity,Long>{
 
 }
