@@ -1,0 +1,45 @@
+
+<div class="container-fluid">
+    <h3 style="text-align: center;">ASSIGNING STUDENT</h3>
+ <form [formGroup]="StudentAssignForm" #saveStudent (ngSubmit)=saveStudentAssignDetails()>
+  <table>   
+    <tr>
+    <th>NAME</th>
+        <td><input type="text"  class="form-control" name="name" formControlName="name"></td>
+       
+    </tr>
+    <tr>
+      <th>ROLLNO</th>
+        <td><input type="number" class="form-control" name="rollNo"  formControlName="rollNo"></td>
+    </tr>
+     
+    <tr>
+    <th>JOINING DATE</th>
+     <td><input type="date" class="form-control" name="joiningDate" formControlName="joiningDate"></td>
+     </tr> 
+
+     <tr>
+    <th>DEPARTMENT ID</th>
+       <td><select class="custom select" class="form-control" name="deptId" formControlName="departmentId">
+         <option value="Id" selected>Id</option>
+         <option>31</option>
+         <option>32</option>
+         <option>36</option>
+      </select>
+      </td>
+    </tr>
+    
+    <tr>
+      <td></td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="submit" class="btn btn-success">SUBMIT</button>&nbsp;&nbsp;
+    <button type="button" class="btn btn-danger">CANCEL</button></td>
+      </tr>
+    </table>
+    
+   
+
+    </form>
+    </div>
+   
+            
